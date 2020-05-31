@@ -30,7 +30,7 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _contex.Activities.FindAsync(request);
+                var activity = await _contex.Activities.FindAsync(request.Id);
                 if(activity == null)
                     throw new Exception("could not find Activity");
 
