@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -24,12 +26,12 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activities = await _contex.Activities.FindAsync(request.Id);
+                var activity = await _contex.Activities.FindAsync(request.Id);
 
-                if(activities == null)
-                    throw new Exception("Could not find Activity");
+                if(activity == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found"});
 
-                _contex.Remove(activities);
+                _contex.Remove(activity);
                 
                 var success = await _contex.SaveChangesAsync() > 0;
                 if (success) return Unit.Value;
