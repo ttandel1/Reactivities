@@ -1,17 +1,48 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
     public class Seed
     {
-         public static void SeedData(DataContext context)
-         {
-             if(!context.Activities.Any())
-             {
-                 var activities = new List<Activity>
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
+        {
+            if (!userManager.Users.Any())
+            {
+                var users = new List<AppUser>
+                {
+                    new AppUser
+                    {
+                        DisplayName="Bob",
+                        UserName="bob",
+                        Email="bobo@test.com"
+                    },
+                    new AppUser
+                    {
+                        DisplayName="Tom",
+                        UserName="tom",
+                        Email="tom@test.com"
+                    },
+                    new AppUser
+                    {
+                        DisplayName="Jane",
+                        UserName="jane",
+                        Email="jane@test.com"
+                    }
+                };
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+            }
+
+            if (!context.Activities.Any())
+            {
+                var activities = new List<Activity>
                 {
                     new Activity
                     {
@@ -30,7 +61,7 @@ namespace Persistence
                         Category = "culture",
                         City = "Paris",
                         Venue = "The Louvre",
-                        
+
                     },
                     new Activity
                     {
@@ -40,7 +71,7 @@ namespace Persistence
                         Category = "music",
                         City = "London",
                         Venue = "Wembly Stadium",
-                        
+
                     },
                     new Activity
                     {
@@ -50,7 +81,7 @@ namespace Persistence
                         Category = "food",
                         City = "London",
                         Venue = "Jamies Italian",
-                       
+
                     },
                     new Activity
                     {
@@ -60,7 +91,7 @@ namespace Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
-                        
+
                     },
                     new Activity
                     {
@@ -70,7 +101,7 @@ namespace Persistence
                         Category = "culture",
                         City = "London",
                         Venue = "British Museum",
-                        
+
                     },
                     new Activity
                     {
@@ -80,7 +111,7 @@ namespace Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Punch and Judy",
-                       
+
                     },
                     new Activity
                     {
@@ -90,7 +121,7 @@ namespace Persistence
                         Category = "music",
                         City = "London",
                         Venue = "O2 Arena",
-                        
+
                     },
                     new Activity
                     {
@@ -100,7 +131,7 @@ namespace Persistence
                         Category = "travel",
                         City = "Berlin",
                         Venue = "All",
-                        
+
                     },
                     new Activity
                     {
@@ -110,13 +141,13 @@ namespace Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
-                        
+
                     }
                 };
 
                 context.Activities.AddRange(activities);
                 context.SaveChanges();
-             }
-         }
+            }
+        }
     }
 }
