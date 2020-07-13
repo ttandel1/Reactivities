@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import ActivityDetailHeader from "../../activities/details/ActivityDetailHeader";
 import ActivityDetailInfo from "../../activities/details/ActivityDetailInfo";
 import ActivityDetailChat from "../../activities/details/ActivityDetailChat";
 import ActivityDetailSidebar from "../../activities/details/ActivityDetailSidebar";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 interface DeatilParams {
   id: string;
@@ -15,8 +15,8 @@ interface DeatilParams {
 const ActivityDetails: React.FC<RouteComponentProps<DeatilParams>> = ({
   match, history
 }) => {
-  const activityStore = useContext(ActivityStore);
-  const { activity, loadActivity } = activityStore;
+  const rootStore = useContext(RootStoreContext);
+  const { activity, loadActivity } = rootStore.activityStore;
 
   useEffect(() => {
     loadActivity(match.params.id)
